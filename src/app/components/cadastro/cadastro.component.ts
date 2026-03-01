@@ -9,6 +9,10 @@ import { UserRole } from '../../shared/enums/user-roles';
 })
 export class CadastroComponent implements OnInit {
 
+  // Variáveis adicionadas para controlar a visibilidade do input de senha
+  showPassword = false;
+  showConfirmPassword = false;
+
   constructor(private authService: AuthService) { }
 
   // Descomente a função abaixo para realizar cadastro assim que acessar a rota /cadastro

@@ -1,1 +1,104 @@
-<p>cadastro works!</p>
+<div class="w-full min-h-screen bg-white flex justify-center">
+
+  <div class="relative w-full max-w-screen min-h-screen overflow-hidden font-['Poppins'] flex flex-col">
+    
+    <div class="absolute inset-0 pointer-events-none z-0">
+      
+      <div class="absolute inset-0 bg-gradient-to-bl from-white from-40% to-sky-300"></div>
+      
+      <div class="hidden md:block">
+        <img src="../../../assets/logos/vector_6.svg" class="absolute left-[-40%] bottom-[-54%] w-full h-full object-contain opacity-40 lg:opacity-100 transition-all duration-500" />
+        
+        <img src="../../../assets/imgs/bola_2.png" class="absolute left-[39%] top-[8%] w-[117px] h-[117px] object-contain opacity-30 scale-50 lg:opacity-100 lg:scale-100 transition-all duration-500" />
+        <img src="../../../assets/imgs/brinquedo_2.png" class="absolute left-[30%] top-[29%] w-[80px] h-[80px] object-contain opacity-30 scale-50 lg:opacity-100 lg:scale-100 transition-all duration-500" />
+        <img src="../../../assets/imgs/saco_racao_2.png" class="absolute left-[7%] top-[40%] w-[122px] h-[122px] object-contain opacity-30 scale-50 lg:opacity-100 lg:scale-100 transition-all duration-500" />
+        <img src="../../../assets/imgs/racao_2.png" class="absolute left-[37%] top-[55%] w-[94px] h-[84px] object-contain opacity-30 scale-50 lg:opacity-100 lg:scale-100 transition-all duration-500" />
+        <img src="../../../assets/imgs/patas_2.png" class="absolute left-[55%] top-[28%] w-[100px] h-[100px] object-contain opacity-30 scale-50 lg:opacity-100 lg:scale-100 transition-all duration-500" />
+      </div>
+
+    </div>
+
+    <header class="relative z-10 flex flex-col md:flex-row items-center justify-between w-full px-6 py-6 md:px-16 lg:px-[140px]">
+      <app-header></app-header>
+      
+      <div class="flex gap-4 mt-6 md:mt-0 pointer-events-auto"></div>
+    </header>
+
+    <main class="relative z-10 flex-1 flex flex-col justify-center items-center lg:items-end px-6 md:px-16 lg:px-[140px] py-12 md:py-0 w-full pointer-events-auto">
+      
+      <div class="w-full max-w-[450px] flex flex-col gap-6 lg:mr-[5%]">
+        
+        <div class="flex flex-col items-center gap-1 w-full">
+          <h1 class="w-full text-sky-950 text-3xl md:text-4xl font-semibold leading-tight text-center">
+            Olá! Seja bem-vindo
+          </h1>
+          <img src="../../../assets/icons/Frame.svg" class="w-12 h-12 object-contain mt-1" alt="Ícone" />
+        </div>
+
+        <form class="flex flex-col gap-4 w-full">
+          
+          <div class="flex flex-col sm:flex-row gap-4 w-full">
+            <div class="relative w-full sm:w-1/2 flex flex-col gap-1">
+              <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Primeiro nome</label>
+              <input type="text" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+              <img src="../../../assets/imgs/nome.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" />
+            </div>
+            
+            <div class="relative w-full sm:w-1/2 flex flex-col gap-1">
+              <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Último nome</label>
+              <input type="text" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+              <img src="../../../assets/imgs/nome.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" />
+            </div>
+          </div>
+
+          <div class="relative w-full flex flex-col gap-1">
+            <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">E-mail</label>
+            <input type="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <img src="../../../assets/imgs/envelope.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" />
+          </div>
+
+          <div class="relative w-full flex flex-col gap-1">
+            <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Senha</label>
+            <input [type]="showPassword ? 'text' : 'password'" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <img [src]="showPassword ? '../../../assets/imgs/olho.png' : '../../../assets/imgs/olho_fechado.png'" (click)="showPassword = !showPassword" class="absolute right-4 top-[26px] w-4 h-4 cursor-pointer hover:opacity-80 transition-opacity" />
+          </div>
+
+          <div class="relative w-full flex flex-col gap-1">
+            <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Confirme sua senha</label>
+            <input [type]="showConfirmPassword ? 'text' : 'password'" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <img [src]="showConfirmPassword ? '../../../assets/imgs/olho.png' : '../../../assets/imgs/olho_fechado.png'" (click)="showConfirmPassword = !showConfirmPassword" class="absolute right-4 top-[26px] w-4 h-4 cursor-pointer hover:opacity-80 transition-opacity" />
+          </div>
+
+          <button type="submit" class="w-full h-12 mt-4 bg-sky-300 rounded-xl flex justify-center items-center hover:bg-sky-400 hover:scale-[1.02] transition-all cursor-pointer shadow-sm">
+            <span class="text-slate-600 text-xl font-bold font-['Poppins']">Criar conta</span>
+          </button>
+        </form>
+
+        <div class="flex justify-end w-full">
+          <span class="text-slate-600 text-xs font-medium font-['Poppins']">Já tem conta? </span>
+          <a routerLink="/login" class="text-black text-xs font-medium font-['Poppins'] hover:underline cursor-pointer ml-1">Log In</a>
+        </div>
+
+        <div class="flex items-center gap-4 w-full my-2">
+          <div class="flex-1 h-[3px] bg-black opacity-30"></div>
+          <span class="text-black text-lg font-bold font-['Poppins']">Ou</span>
+          <div class="flex-1 h-[3px] bg-black opacity-30"></div>
+        </div>
+
+        <div class="flex justify-center items-center gap-20 w-full">
+          <button class="w-[72px] h-[72px] hover:scale-105 transition-transform cursor-pointer bg-transparent p-0 border-none outline-none">
+            <img class="w-full h-full object-contain" src="../../../assets/icons/Google.png" alt="Google" />
+          </button>
+          <button class="w-[72px] h-[72px] hover:scale-105 transition-transform cursor-pointer bg-transparent p-0 border-none outline-none">
+            <img class="w-full h-full object-contain" src="../../../assets/icons/Facebook.png" alt="Facebook" />
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+
+    <app-footer></app-footer>
+
+  </div>
+</div>
