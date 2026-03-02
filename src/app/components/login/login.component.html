@@ -50,7 +50,7 @@
               <input type="checkbox" class="w-4 h-4 rounded-sm border border-zinc-500 cursor-pointer accent-sky-500" />
               <span class="text-black text-xs font-medium font-['Poppins']">Lembrar - me</span>
             </label>
-            <a routerLink="/recuperar-senha" class="text-black text-xs font-medium font-['Poppins'] hover:underline cursor-pointer">Esqueceu a senha?</a>
+            <a (click)="mostrarModalRecuperarSenha = true" class="text-black text-xs font-medium font-['Poppins'] hover:underline cursor-pointer">Esqueceu a senha?</a>
           </div>
 
           <div class="flex flex-col sm:flex-row gap-4 w-full mt-4">
@@ -84,6 +84,11 @@
     </main>
 
     <app-footer></app-footer>
+
+    <app-recuperar-senha 
+      *ngIf="mostrarModalRecuperarSenha" 
+      (fecharModal)="mostrarModalRecuperarSenha = false">
+    </app-recuperar-senha>
 
   </div>
 </div>

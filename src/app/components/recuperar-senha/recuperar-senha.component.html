@@ -1,1 +1,40 @@
-<p>recuperar-senha works!</p>
+<div (click)="fechar()" 
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 font-['Poppins']"
+     [ngClass]="isClosing ? 'animate-fade-out' : 'animate-fade-in'">
+  
+  <div (click)="$event.stopPropagation()" 
+       class="relative w-full max-w-[575px] min-h-[450px] bg-white rounded-[20px] shadow-2xl p-8 sm:p-14 flex flex-col items-center justify-center gap-8 overflow-hidden"
+       [ngClass]="isClosing ? 'animate-pop-out' : 'animate-pop-in'">
+    
+    <img src="../../../assets/imgs/patas.png" class="absolute right-[-20px] top-[30%] w-[120px] sm:w-[151px] opacity-40 pointer-events-none" alt="Decoração patas" />
+    <img src="../../../assets/imgs/racao_2.png" class="absolute left-[10px] bottom-[10px] w-[70px] sm:w-[94px] opacity-40 pointer-events-none" alt="Decoração ração" />
+
+    <div class="relative z-10 flex flex-col items-center w-full gap-2">
+      
+      <h2 class="text-slate-600 text-3xl sm:text-4xl font-semibold text-center leading-tight">
+        Redefina a sua senha
+      </h2>
+      
+      <p class="text-black text-lg sm:text-xl font-normal text-center leading-relaxed max-w-[400px]">
+        Informe o seu e-mail para receber um código e recuperar o seu acesso
+      </p>
+
+    </div>
+
+    <form class="relative z-10 flex flex-col w-full gap-8 mt-2">
+      
+      <div class="relative w-full flex flex-col gap-1">
+        <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">E-mail</label>
+        <input type="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-white/80 backdrop-blur-sm px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+        <img src="../../../assets/imgs/envelope.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" alt="Ícone envelope" />
+      </div>
+
+      <button type="submit" class="w-full h-12 bg-sky-300 rounded-xl flex justify-center items-center hover:bg-sky-400 hover:scale-[1.02] transition-all cursor-pointer shadow-sm">
+        <span class="text-slate-600 text-lg sm:text-xl font-bold">Enviar link de recuperação</span>
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
