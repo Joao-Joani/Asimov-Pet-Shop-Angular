@@ -14,6 +14,12 @@ import { RecuperarSenhaComponent } from './components/recuperar-senha/recuperar-
 import { HomeComponent } from './components/home/home.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { HeaderComponent } from './shared/components/header/header.component';
+import { UserComponent } from './shared/components/user/user.component';
+import { DashboardComponent } from './shared/components/dashboard/dashboard.component';
+import { TemplateComponent } from './shared/components/template/template.component';
+import { InicioComponent } from './components/inicio/inicio.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +29,13 @@ import { HeaderComponent } from './shared/components/header/header.component';
     RecuperarSenhaComponent,
     HomeComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    UserComponent,
+    DashboardComponent,
+    TemplateComponent,
+    InicioComponent,
+    PerfilComponent,
+    UsuariosComponent
   ],
   imports: [
     BrowserModule,
