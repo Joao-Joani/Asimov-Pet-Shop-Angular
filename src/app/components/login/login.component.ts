@@ -8,6 +8,9 @@ import { AuthService } from '../../shared/services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
+  // Variáveis adicionadas para controlar a visibilidade do input de senha
+  showPassword = false;
+
   constructor(private authService: AuthService) { }
 
   // Descomente a parte abaixo para realizar um login ao entrar na rota /login
