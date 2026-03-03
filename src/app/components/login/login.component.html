@@ -31,17 +31,17 @@
           Login
         </h1>
 
-        <form class="flex flex-col gap-5 w-full">
+        <form class="flex flex-col gap-5 w-full" #formLogin="ngForm" (ngSubmit)="login(formLogin)">
           
           <div class="relative w-full flex flex-col gap-1">
             <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">E-mail</label>
-            <input type="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <input type="email" [(ngModel)]="userLogin.email" name="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" required/>
             <img src="../../../assets/imgs/envelope.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" />
           </div>
 
           <div class="relative w-full flex flex-col gap-1">
             <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Senha</label>
-            <input [type]="showPassword ? 'text' : 'password'" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="userLogin.senha" name="senha" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" required/>
             <img [src]="showPassword ? '../../../assets/imgs/olho.png' : '../../../assets/imgs/olho_fechado.png'" (click)="showPassword = !showPassword" class="absolute right-4 top-[26px] w-4 h-4 cursor-pointer hover:opacity-80 transition-opacity" />
           </div>
 
@@ -91,4 +91,3 @@
     </app-recuperar-senha>
 
   </div>
-</div>

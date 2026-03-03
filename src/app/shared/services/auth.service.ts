@@ -49,10 +49,12 @@ export class AuthService {
     try {
       const cred = await this.auth.signInWithEmailAndPassword(email, password);
       console.log("Logado");
-      this.router.navigate(['/home']);
-      console.log('salvo na coleção');
-    } catch(error) {
-      console.log(error);
+      this.router.navigate(['/inicio']);
+    } catch(error: any) {
+      if(error.code === 'auth/invalid-credential'){
+        alert('Email ou Senha incorretos');
+      }
+      console.log(error.code);
     }
   }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../shared/services/auth.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -14,5 +15,21 @@ export class LoginComponent {
   mostrarModalRecuperarSenha = false;
 
   constructor(private authService: AuthService) { }
-  
+
+  userLogin = {
+    email:  '',
+    senha: ''
+  }
+
+  login(formLogin: NgForm) {
+
+    if(formLogin.invalid) {
+      alert('Preencha todos os campos')
+    }
+
+    this.authService.login(this.userLogin.email, this.userLogin.senha);
+
+    console.log(this.userLogin);
+  }
+
 }
