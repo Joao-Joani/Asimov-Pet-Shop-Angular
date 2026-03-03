@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { LayoutService } from '../../shared/services/layout.service';
+import { Observable } from 'rxjs/internal/Observable';
 import { UsersService } from '../../shared/services/users.service';
 
 @Component({
@@ -6,17 +8,21 @@ import { UsersService } from '../../shared/services/users.service';
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'
 })
+
 export class UsuariosComponent implements OnInit {
 
   users: any[] = [];
 
-  constructor(private usersService: UsersService) {}
+  tituloAtual$!: Observable<string>;
+
+  constructor(private usersService: UsersService, private layoutService: LayoutService) {}
 
   ngOnInit(): void {
+    this.tituloAtual$ = this.layoutService.tituloAtual$;
+
     this.usersService.getAllUsers().subscribe(data => {
       this.users = data;
       console.log(this.users);
     })
   }
-
 }
