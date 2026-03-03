@@ -20,6 +20,9 @@ import { TemplateComponent } from './shared/components/template/template.compone
 import { InicioComponent } from './components/inicio/inicio.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { ProdutosComponent } from './components/produtos/produtos.component';
+import { EstoqueComponent } from './components/estoque/estoque.component';
+import { RegistrosComponent } from './components/registros/registros.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
     TemplateComponent,
     InicioComponent,
     PerfilComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    ProdutosComponent,
+    EstoqueComponent,
+    RegistrosComponent
   ],
   imports: [
     BrowserModule,
