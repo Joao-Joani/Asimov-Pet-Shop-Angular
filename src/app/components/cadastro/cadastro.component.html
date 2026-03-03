@@ -35,37 +35,37 @@
           <img src="../../../assets/icons/Frame.svg" class="w-12 h-12 object-contain mt-1" alt="Ícone" />
         </div>
 
-        <form class="flex flex-col gap-4 w-full">
+        <form class="flex flex-col gap-4 w-full" #formCadastro="ngForm" (ngSubmit)="cadastro(formCadastro)">
           
           <div class="flex flex-col sm:flex-row gap-4 w-full">
             <div class="relative w-full sm:w-1/2 flex flex-col gap-1">
               <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Primeiro nome</label>
-              <input type="text" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+              <input type="text" [(ngModel)]="userForm.name" name="name" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 focus:outline-none focus:border-sky-500 text-sm text-sky-950" required/>
               <img src="../../../assets/imgs/nome.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" />
             </div>
             
             <div class="relative w-full sm:w-1/2 flex flex-col gap-1">
               <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Último nome</label>
-              <input type="text" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+              <input type="text" [(ngModel)]="userForm.lastName" name="lastName" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 focus:outline-none focus:border-sky-500 text-sm text-sky-950" required/>
               <img src="../../../assets/imgs/nome.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" />
             </div>
           </div>
 
           <div class="relative w-full flex flex-col gap-1">
             <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">E-mail</label>
-            <input type="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <input type="email" [(ngModel)]="userForm.email" name="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" required/>
             <img src="../../../assets/imgs/envelope.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" />
           </div>
 
           <div class="relative w-full flex flex-col gap-1">
             <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Senha</label>
-            <input [type]="showPassword ? 'text' : 'password'" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="userForm.pass" name="pass" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" required/>
             <img [src]="showPassword ? '../../../assets/imgs/olho.png' : '../../../assets/imgs/olho_fechado.png'" (click)="showPassword = !showPassword" class="absolute right-4 top-[26px] w-4 h-4 cursor-pointer hover:opacity-80 transition-opacity" />
           </div>
 
           <div class="relative w-full flex flex-col gap-1">
             <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">Confirme sua senha</label>
-            <input [type]="showConfirmPassword ? 'text' : 'password'" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+            <input [type]="showConfirmPassword ? 'text' : 'password'" [(ngModel)]="userForm.confirmPass" name="confirmPass" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-transparent px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" required/>
             <img [src]="showConfirmPassword ? '../../../assets/imgs/olho.png' : '../../../assets/imgs/olho_fechado.png'" (click)="showConfirmPassword = !showConfirmPassword" class="absolute right-4 top-[26px] w-4 h-4 cursor-pointer hover:opacity-80 transition-opacity" />
           </div>
 

@@ -26,8 +26,13 @@ export class AuthService {
 
       await this.auth.signOut();
 
-    } catch(error) {
-      console.log(error);
+      this.router.navigate(['/login']);
+
+    } catch(error: any) {
+      if(error.code == 'auth/email-already-in-use'){
+        alert('Email já cadastrado');
+      }
+      console.log(error.code);
     } 
   }
 
@@ -46,6 +51,14 @@ export class AuthService {
       console.log("Logado");
       this.router.navigate(['/home']);
       console.log('salvo na coleção');
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  async logout() {
+    try {
+      await this.auth.signOut();
     } catch(error) {
       console.log(error);
     }
