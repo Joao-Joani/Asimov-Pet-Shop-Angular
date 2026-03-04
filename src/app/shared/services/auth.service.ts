@@ -61,6 +61,7 @@ export class AuthService {
   async logout() {
     try {
       await this.auth.signOut();
+      this.router.navigate(['/']);
     } catch(error) {
       console.log(error);
     }

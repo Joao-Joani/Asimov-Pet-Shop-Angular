@@ -10,10 +10,12 @@ export const guestGuard: CanActivateFn = (route, state) => {
   return afAuth.user.pipe(
     map(user => {
       if (user) {
+        // Usuário logado: vai para o início e é bloqueado de acessar telas de login/cadastro
         router.navigate(['/inicio']);
-        return true;
+        return false; 
       } else {
-        return false;
+        // Ninguém logado: acesso permitido à rota de login/cadastro/home
+        return true; 
       }
     })
   )
