@@ -62,6 +62,10 @@
             </button>
           </div>
 
+          <div *ngIf="errorMessage" class="text-red-500 text-sm font-medium text-center transition-all">
+            {{ errorMessage }}
+          </div>
+
         </form>
 
         <div class="flex items-center gap-4 w-full my-2">
@@ -91,3 +95,4 @@
     </app-recuperar-senha>
 
   </div>
+</div>

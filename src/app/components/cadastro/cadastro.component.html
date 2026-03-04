@@ -72,6 +72,11 @@
           <button type="submit" class="w-full h-12 mt-4 bg-sky-300 rounded-xl flex justify-center items-center hover:bg-sky-400 hover:scale-[1.02] transition-all cursor-pointer shadow-sm">
             <span class="text-slate-600 text-xl font-bold font-['Poppins']">Criar conta</span>
           </button>
+          
+          <div *ngIf="errorMessage" class="text-red-500 text-sm font-medium text-center mt-1 transition-all">
+            {{ errorMessage }}
+          </div>
+
         </form>
 
         <div class="flex justify-end w-full">

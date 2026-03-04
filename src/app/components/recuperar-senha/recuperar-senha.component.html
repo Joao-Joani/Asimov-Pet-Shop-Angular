@@ -21,7 +21,7 @@
 
     </div>
 
-    <form class="relative z-10 flex flex-col w-full gap-8 mt-2" (ngSubmit)="recuperarSenha()">
+    <form class="relative z-10 flex flex-col w-full gap-5 mt-2" (ngSubmit)="recuperarSenha()">
       
       <div class="relative w-full flex flex-col gap-1">
         <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">E-mail</label>
@@ -29,7 +29,15 @@
         <img src="../../../assets/imgs/envelope.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" alt="Ícone envelope" />
       </div>
 
-      <button type="submit" class="w-full h-12 bg-sky-300 rounded-xl flex justify-center items-center hover:bg-sky-400 hover:scale-[1.02] transition-all cursor-pointer shadow-sm">
+      <div *ngIf="errorMessage" class="text-red-500 text-sm font-medium text-center transition-all">
+        {{ errorMessage }}
+      </div>
+      
+      <div *ngIf="successMessage" class="text-slate-600 text-sm font-medium text-center transition-all">
+        {{ successMessage }}
+      </div>
+
+      <button type="submit" class="w-full h-12 mt-2 bg-sky-300 rounded-xl flex justify-center items-center hover:bg-sky-400 hover:scale-[1.02] transition-all cursor-pointer shadow-sm">
         <span class="text-slate-600 text-lg sm:text-xl font-bold">Enviar link de recuperação</span>
       </button>
 

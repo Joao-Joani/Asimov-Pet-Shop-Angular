@@ -4,7 +4,6 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { UserInterface } from '../interfaces/user-interface';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -29,10 +28,8 @@ export class AuthService {
       this.router.navigate(['/login']);
 
     } catch(error: any) {
-      if(error.code == 'auth/email-already-in-use'){
-        alert('Email já cadastrado');
-      }
       console.log(error.code);
+      throw error;
     } 
   }
 
@@ -51,10 +48,8 @@ export class AuthService {
       console.log("Logado");
       this.router.navigate(['/inicio']);
     } catch(error: any) {
-      if(error.code === 'auth/invalid-credential'){
-        alert('Email ou Senha incorretos');
-      }
       console.log(error.code);
+      throw error; 
     }
   }
 
@@ -70,9 +65,9 @@ export class AuthService {
   async recuperarSenha(email: string) {
     try {
       await this.auth.sendPasswordResetEmail(email);
-      alert('Link enviado. Por favor, verifique seu email!');
     } catch(error) {
-      alert('Erro ao enviar email');
+      console.log(error);
+      throw error;
     }
   }
 }

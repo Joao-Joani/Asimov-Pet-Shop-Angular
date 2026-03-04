@@ -13,6 +13,8 @@ export class LoginComponent {
   showPassword = false;
 
   mostrarModalRecuperarSenha = false;
+  
+  errorMessage: string = '';
 
   constructor(private authService: AuthService) { }
 
@@ -21,15 +23,26 @@ export class LoginComponent {
     senha: ''
   }
 
-  login(formLogin: NgForm) {
+  async login(formLogin: NgForm) {
+    this.errorMessage = '';
 
     if(formLogin.invalid) {
-      alert('Preencha todos os campos')
+      this.errorMessage = 'Preencha todos os campos!';
+      return;
     }
 
-    this.authService.login(this.userLogin.email, this.userLogin.senha);
+    try {
+      await this.authService.login(this.userLogin.email, this.userLogin.senha);
+      
+      console.log(this.userLogin);
 
-    console.log(this.userLogin);
+    } catch(error: any) {
+      if(error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        this.errorMessage = 'E-mail ou senha inválidos!';
+      } else {
+        this.errorMessage = 'Ocorreu um erro ao tentar fazer login.';
+      }
+    }
   }
 
 }

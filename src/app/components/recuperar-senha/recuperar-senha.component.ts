@@ -8,49 +8,60 @@ import { AuthService } from '../../shared/services/auth.service';
 })
 export class RecuperarSenhaComponent {
 
-constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
-// Cria um evento para avisar o componente pai que deve fechar
-@Output() fecharModal = new EventEmitter<void>();
+  // Cria um evento para avisar o componente pai que deve fechar
+  @Output() fecharModal = new EventEmitter<void>();
 
-// Variável para controlar a animação
-isClosing = false;
+  // Variável para controlar a animação
+  isClosing = false;
 
-email = '';
+  email = '';
+  
+  // Variáveis adicionadas para controlar as mensagens no HTML
+  errorMessage: string = '';
+  successMessage: string = '';
 
-emailValidation(email: string): boolean {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return regex.test(email);
-}
+  emailValidation(email: string): boolean {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
 
-// Função chamada ao clicar no fundo escuro
-fechar() {
-  this.isClosing = true; // Aciona a animação de sumir
+  // Função chamada ao clicar no fundo escuro
+  fechar() {
+    this.isClosing = true;
 
-  // Espera a animação terminar (300ms) antes de avisar o componente pai
     setTimeout(() => {
       this.fecharModal.emit();
     }, 300);
   }
 
-  recuperarSenha() {
+  async recuperarSenha() {
+    this.errorMessage = '';
+    this.successMessage = '';
+
     const emailval = this.emailValidation(this.email);
 
     if(!this.email){
-      alert('Email vazio!');
-      return
+      this.errorMessage = 'E-mail vazio!';
+      return;
     }
     if(!emailval){
-      alert('Email informado é inválido');
-      return
+      this.errorMessage = 'O e-mail informado é inválido.';
+      return;
     }
 
-    this.authService.recuperarSenha(this.email);
+    try {
+      await this.authService.recuperarSenha(this.email);
+      this.successMessage = 'Link enviado. Por favor, verifique seu e-mail!';
+      console.log(this.email);
 
-    setTimeout(() => {
-      this.fechar();
-    }, 2000);
+      setTimeout(() => {
+        this.fechar();
+      }, 2000);
 
-    console.log(this.email);
+    } catch (error: any) {
+      this.errorMessage = 'Erro ao enviar e-mail. Verifique o endereço digitado.';
+    }
   }
 }

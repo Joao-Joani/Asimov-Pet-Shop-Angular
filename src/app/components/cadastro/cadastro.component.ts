@@ -10,9 +10,10 @@ import { NgForm } from '@angular/forms';
 })
 export class CadastroComponent {
 
-  // Variáveis adicionadas para controlar a visibilidade do input de senha
   showPassword = false;
   showConfirmPassword = false;
+  
+  errorMessage: string = '';
 
   constructor(private authService: AuthService) { }
 
@@ -29,26 +30,27 @@ export class CadastroComponent {
     return regex.test(email);
   }
 
-  cadastro(formCadastro: NgForm) {
+  async cadastro(formCadastro: NgForm) {
+    this.errorMessage = '';
 
     if (formCadastro.invalid) {
-      alert('Atenção! Preencha todos os campos!');
+      this.errorMessage = 'Atenção! Preencha todos os campos!';
       return;
     }
 
     if(!this.emailValidation(this.userForm.email)){
-      alert('Email inválido')
-      return
+      this.errorMessage = 'E-mail inválido.';
+      return;
     }
 
     if(!(this.userForm.pass.length>=6)){
-      alert('A senha deve conter no mínimo 6 caracteres');
-      return
+      this.errorMessage = 'A senha deve conter no mínimo 6 caracteres.';
+      return;
     }
 
     if(this.userForm.pass != this.userForm.confirmPass){
-      alert('Senha e Confirmação de senha diferentes');
-      return
+      this.errorMessage = 'Senha e Confirmação de senha diferentes.';
+      return;
     }
 
     const user = {
@@ -59,8 +61,15 @@ export class CadastroComponent {
       codFunc: ''
     }
 
-    this.authService.cadastro(user);
-
+    try {
+      await this.authService.cadastro(user);
+    } catch (error: any) {
+      if (error.code === 'auth/email-already-in-use') {
+        this.errorMessage = 'Este e-mail já está cadastrado!';
+      } else {
+        this.errorMessage = 'Ocorreu um erro ao realizar o cadastro.';
+      }
+    }
   }
 
 }
