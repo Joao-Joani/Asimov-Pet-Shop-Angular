@@ -30,4 +30,21 @@ export class UsersService {
       })
     );
   }
+
+  async alterarPerfil(nome: string) {
+
+    const user = await this.auth.currentUser;
+
+    if(!user?.email){
+      throw new Error('Usuário não autenticado!');
+    }
+
+    await user.updateProfile({
+      displayName: nome
+    });
+
+    return this.firestore.collection('funcionarios').doc(user.email).update({ nome: nome });
+
+    console.log(user?.email);
+  }
 }

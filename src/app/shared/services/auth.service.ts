@@ -65,4 +65,13 @@ export class AuthService {
       console.log(error);
     }
   }
+
+  async recuperarSenha(email: string) {
+    try {
+      await this.auth.sendPasswordResetEmail(email);
+      alert('Link enviado. Por favor, verifique seu email!');
+    } catch(error) {
+      alert('Erro ao enviar email');
+    }
+  }
 }

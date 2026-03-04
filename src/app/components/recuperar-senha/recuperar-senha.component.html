@@ -21,11 +21,11 @@
 
     </div>
 
-    <form class="relative z-10 flex flex-col w-full gap-8 mt-2">
+    <form class="relative z-10 flex flex-col w-full gap-8 mt-2" (ngSubmit)="recuperarSenha()">
       
       <div class="relative w-full flex flex-col gap-1">
         <label class="text-zinc-500 text-xs font-medium pl-4 pointer-events-none">E-mail</label>
-        <input type="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-white/80 backdrop-blur-sm px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" />
+        <input type="email" class="w-full h-11 rounded-2xl border-2 border-zinc-500 bg-white/80 backdrop-blur-sm px-4 pr-10 focus:outline-none focus:border-sky-500 text-sm text-sky-950" [(ngModel)]="email" name="email"/>
         <img src="../../../assets/imgs/envelope.png" class="absolute right-4 top-[26px] w-4 h-4 pointer-events-none" alt="Ícone envelope" />
       </div>
 

@@ -12,12 +12,14 @@ export class PerfilComponent implements OnInit {
 
   tituloAtual$!: Observable<string>;
 
+  user: any
+
   // Dados genéricos simulando o que virá do banco de dados
   userData = {
-    firstName: 'Teste',
-    lastName: 'Da Silva',
-    email: 'teste@habitatpet.com.br',
-    cargo: 'Funcionário'
+    firstName: '',
+    lastName: '',
+    email: '',
+    cargo: ''
   };
 
   // Variáveis booleanas para controlar o estado dos campos (bloqueado/liberado)
@@ -32,7 +34,10 @@ export class PerfilComponent implements OnInit {
   ngOnInit(): void {
     this.tituloAtual$ = this.layoutService.tituloAtual$;
     this.userService.getMyUser().subscribe(user => {
-      console.log('Dados do usuário vindo do service:', user);
+      this.user = user;
+      [this.userData.firstName, this.userData.lastName] = this.user.nome.split(" ")
+      this.userData.email = this.user.email;
+      this.userData.cargo = this.user.perfil;
     });
   }
 
@@ -48,8 +53,19 @@ export class PerfilComponent implements OnInit {
   // Função chamada ao clicar em "Salvar alterações"
   salvarAlteracoes(): void {
     // Aqui entrará a requisição para salvar no Firebase
-    console.log('Dados salvos:', this.userData);
-    
+    //console.log('Dados salvos:', this.userData);
+
+    const nome = this.userData.firstName + ' ' + this.userData.lastName
+
+    console.log(nome);
+
+    if(!this.userData.firstName || !this.userData.lastName){
+      alert('Nome ou Sobrenome vazios');
+      return
+    }
+
+    this.userService.alterarPerfil(nome);
+
     // Bloqueia os campos de nome novamente após salvar
     this.isEditingFirstName = false;
     this.isEditingLastName = false;
