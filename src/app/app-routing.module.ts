@@ -9,17 +9,19 @@ import { UsuariosComponent } from './components/usuarios/usuarios.component';
 import { ProdutosComponent } from './components/produtos/produtos.component';
 import { EstoqueComponent } from './components/estoque/estoque.component';
 import { RegistrosComponent } from './components/registros/registros.component';
+import { authGuard } from './guards/auth.guard';
+import { guestGuard } from './guards/guest.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'cadastro', component: CadastroComponent },
-  { path: 'inicio', component: InicioComponent },
-  { path: 'perfil', component: PerfilComponent },
-  { path: 'usuarios', component: UsuariosComponent },
-  { path: 'produtos', component: ProdutosComponent },
-  { path: 'estoque', component: EstoqueComponent },
-  { path: 'registros', component: RegistrosComponent },
+  { path: '', component: HomeComponent, canActivate: [guestGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [guestGuard] },
+  { path: 'cadastro', component: CadastroComponent, canActivate: [guestGuard] },
+  { path: 'inicio', component: InicioComponent, canActivate: [authGuard] },
+  { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuard] },
+  { path: 'produtos', component: ProdutosComponent, canActivate: [authGuard] },
+  { path: 'estoque', component: EstoqueComponent, canActivate: [authGuard] },
+  { path: 'registros', component: RegistrosComponent, canActivate: [authGuard] },
 ];
 
 @NgModule({
