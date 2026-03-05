@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../../shared/services/layout.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { UsersService } from '../../shared/services/users.service';
+import { user } from '@angular/fire/auth';
+import { UserRole } from '../../shared/enums/user-roles';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-usuarios',
@@ -21,7 +24,22 @@ export class UsuariosComponent implements OnInit {
   itemsPerPage: number = 5;
   totalPages: number = 1;
 
-  constructor(private usersService: UsersService, private layoutService: LayoutService) {}
+  perfis = Object.values(UserRole).filter(p => p !== UserRole.admin);
+
+  getCodFunc(user: any) {
+    // se a linha está sendo editada, mostra vazio no input
+    if (this.editId === user.email) {
+      return user.codFunc || ''; // deixa vazio enquanto edita
+    }
+    // se não está editando, mostra # quando estiver vazio
+    return user.codFunc ? user.codFunc : '#';
+  }
+
+  setCodFunc(user: any, value: string) {
+    user.codFunc = value.replace('#', '')
+  }
+
+  constructor(private usersService: UsersService, private layoutService: LayoutService, private firestore: AngularFirestore) {}
 
   ngOnInit(): void {
     this.tituloAtual$ = this.layoutService.tituloAtual$;
@@ -75,5 +93,57 @@ export class UsuariosComponent implements OnInit {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
     }
+  }
+
+  edit = false;
+
+  bkpUsers: any[] = [];
+
+  editId: string | null = null;
+
+  editUser(user: any) {
+
+    this.editId = user.email;
+    
+    this.bkpUsers = structuredClone(this.filteredUsers);
+
+  }
+
+  cancelEdit() {
+    
+    this.filteredUsers = structuredClone(this.bkpUsers);
+
+    this.editId = null;
+  }
+
+  async salvar(user: any){
+    console.log(user);
+
+    const codDuplicado = this.users.some(
+    u => u.codFunc === user.codFunc && u.email !== user.email
+    );
+
+    if(!user.nome){
+      alert('Campo nome está vazio');
+      return
+    }
+
+    if (codDuplicado) {
+      alert('Esse código já está em uso por outro usuário!');
+      return; // não salva
+    }
+
+    try {
+      await this.firestore.collection('funcionarios').doc(user.email).update({
+        nome: user.nome,
+        codFunc: user.codFunc,
+        perfil: user.perfil
+      });
+      alert('Usuário atualizado')
+      this.editId = null;
+    } catch(error) {
+      console.log(error);
+    }
+
   }
 }
