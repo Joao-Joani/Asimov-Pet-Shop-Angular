@@ -58,7 +58,7 @@
                     <option value="Lote">Lote</option>
                     <option value="Data da última edição">Data da última edição</option>
                     <option value="Data">Data de cadastro</option>
-                    <option value="Preço">Preço</option>
+                    <option value="Quantidade">Quantidade</option>
                   </select>
                   <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                 </div>
@@ -85,7 +85,7 @@
                   <th class="py-3 px-6 text-left w-1/6">Lote</th>
                   <th class="py-3 px-6 text-left w-1/5">Data de cadastro</th>
                   <th class="py-3 px-6 text-left w-1/6">Tipo</th>
-                  <th class="py-3 px-6 text-left rounded-r-2xl w-1/6">Preço</th>
+                  <th class="py-3 px-6 text-left rounded-r-2xl w-1/6">Quantidade</th>
                 </tr>
               </thead>
               <tbody class="text-black text-base md:text-lg font-medium font-['Poppins']">
@@ -95,7 +95,7 @@
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.lote">#{{ item.lote }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.dataCadastro">{{ item.dataCadastro | date:'dd/MM/yyyy' }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.tipo">{{ item.tipo }}</td>
-                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.preco">{{ item.preco | currency:'BRL' }}</td>
+                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.quantidade">{{ item.quantidade }}</td>
                 </tr>
 
                 <tr *ngIf="filteredEstoque.length === 0">

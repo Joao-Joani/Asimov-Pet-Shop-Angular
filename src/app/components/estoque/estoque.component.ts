@@ -29,13 +29,13 @@ export class EstoqueComponent implements OnInit {
 
     // Mock para testes
     this.estoque = [
-      { nome: 'Ração Premium Dog', lote: 'LT-1045', dataCadastro: '2026-03-01T10:00:00', dataUltimaEdicao: '2026-03-10T15:00:00', tipo: 'Físico', preco: 150.00 },
-      { nome: 'E-book: Como adestrar', lote: 'LT-0000', dataCadastro: '2026-03-02T14:30:00', dataUltimaEdicao: '2026-03-02T14:30:00', tipo: 'Digital', preco: 89.90 },
-      { nome: 'Banho e Tosa Completo', lote: 'SRV-01', dataCadastro: '2026-03-04T08:15:00', dataUltimaEdicao: '2026-03-05T09:00:00', tipo: 'Serviço', preco: 60.00 },
-      { nome: 'Coleira Azul', lote: 'LT-2098', dataCadastro: '2026-03-05T11:20:00', dataUltimaEdicao: '2026-03-12T11:20:00', tipo: 'Físico', preco: 45.50 },
-      { nome: 'Consulta Veterinária', lote: 'SRV-02', dataCadastro: '2026-03-06T09:00:00', dataUltimaEdicao: '2026-03-06T09:00:00', tipo: 'Serviço', preco: 120.00 },
-      { nome: 'Brinquedo Mordedor', lote: 'LT-3301', dataCadastro: '2026-03-07T16:45:00', dataUltimaEdicao: '2026-03-09T16:45:00', tipo: 'Físico', preco: 25.00 },
-      { nome: 'Ração Gatos', lote: 'LT-1050', dataCadastro: '2026-03-08T13:10:00', dataUltimaEdicao: '2026-03-15T10:00:00', tipo: 'Físico', preco: 110.00 }
+      { nome: 'Ração Premium Dog', lote: 'LT-1045', dataCadastro: '2026-03-01T10:00:00', dataUltimaEdicao: '2026-03-10T15:00:00', tipo: 'Físico', quantidade: 50 },
+      { nome: 'E-book: Como adestrar', lote: 'LT-0000', dataCadastro: '2026-03-02T14:30:00', dataUltimaEdicao: '2026-03-02T14:30:00', tipo: 'Digital', quantidade: 99 },
+      { nome: 'Banho e Tosa Completo', lote: 'SRV-01', dataCadastro: '2026-03-04T08:15:00', dataUltimaEdicao: '2026-03-05T09:00:00', tipo: 'Serviço', quantidade: 99 },
+      { nome: 'Coleira Azul', lote: 'LT-2098', dataCadastro: '2026-03-05T11:20:00', dataUltimaEdicao: '2026-03-12T11:20:00', tipo: 'Físico', quantidade: 15 },
+      { nome: 'Consulta Veterinária', lote: 'SRV-02', dataCadastro: '2026-03-06T09:00:00', dataUltimaEdicao: '2026-03-06T09:00:00', tipo: 'Serviço', quantidade: 99 },
+      { nome: 'Brinquedo Mordedor', lote: 'LT-3301', dataCadastro: '2026-03-07T16:45:00', dataUltimaEdicao: '2026-03-09T16:45:00', tipo: 'Físico', quantidade: 32 },
+      { nome: 'Ração Gatos', lote: 'LT-1050', dataCadastro: '2026-03-08T13:10:00', dataUltimaEdicao: '2026-03-15T10:00:00', tipo: 'Físico', quantidade: 8 }
     ];
     
     this.applyFiltersAndSort();
@@ -83,9 +83,9 @@ export class EstoqueComponent implements OnInit {
       } else if (this.sortBy === 'Data') {
         valorA = new Date(a.dataCadastro).getTime();
         valorB = new Date(b.dataCadastro).getTime();
-      } else if (this.sortBy === 'Preço') {
-        valorA = a.preco;
-        valorB = b.preco;
+      } else if (this.sortBy === 'Quantidade') {
+        valorA = a.quantidade;
+        valorB = b.quantidade;
       } else if (this.sortBy === 'Data da última edição') {
         valorA = new Date(a.dataUltimaEdicao).getTime();
         valorB = new Date(b.dataUltimaEdicao).getTime();

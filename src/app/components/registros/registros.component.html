@@ -17,7 +17,7 @@
       
       <div class="flex-1 w-full h-full flex flex-col overflow-hidden">
         
-        <div class="text-black text-6xl font-bold font-['Poppins'] leading-[70.40px] mb-8 capitalize shrink-0">
+        <div class="text-black text-6xl font-bold font-['Poppins'] leading-[70.40px] mb-8 shrink-0">
           {{ tituloAtual$ | async }} de baixas
         </div>
 
@@ -55,9 +55,9 @@
                 <div class="relative w-56 h-11">
                   <select [(ngModel)]="sortBy" (change)="applyFiltersAndSort()" class="w-full h-full px-3 pr-10 rounded-2xl border-2 border-zinc-500 bg-transparent outline-none text-zinc-600 text-base font-normal font-['Poppins'] cursor-pointer hover:border-sky-500 transition-colors appearance-none">
                     <option value="Nome">Nome</option>
-                    <option value="Quantidade">Quantidade</option>
                     <option value="Data da baixa">Data da baixa</option>
                     <option value="Responsável">Responsável</option>
+                    <option value="Quantidade">Quantidade</option>
                   </select>
                   <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                 </div>
@@ -81,20 +81,20 @@
               <thead>
                 <tr class="bg-sky-300 text-black text-lg md:text-xl font-medium font-['Poppins']">
                   <th class="py-3 px-6 text-left rounded-l-2xl w-1/4">Nome</th>
-                  <th class="py-3 px-6 text-left w-1/6">Quantidade</th>
                   <th class="py-3 px-6 text-left w-1/6">Data da baixa</th>
                   <th class="py-3 px-6 text-left w-1/4">Motivo</th>
-                  <th class="py-3 px-6 text-left rounded-r-2xl w-1/6">Responsável</th>
+                  <th class="py-3 px-6 text-left w-1/6">Responsável</th>
+                  <th class="py-3 px-6 text-left rounded-r-2xl w-1/6">Quantidade</th>
                 </tr>
               </thead>
               <tbody class="text-black text-base md:text-lg font-medium font-['Poppins']">
                 
                 <tr *ngFor="let registro of paginatedRegistros" class="border-b border-black/20 hover:bg-slate-50 transition-colors">
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.nome">{{ registro.nome }}</td>
-                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.quantidade">{{ registro.quantidade }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.dataBaixa">{{ registro.dataBaixa | date:'dd/MM/yyyy' }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.motivo">{{ registro.motivo }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.responsavel">{{ registro.responsavel }}</td>
+                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.quantidade">{{ registro.quantidade }}</td>
                 </tr>
 
                 <tr *ngIf="filteredRegistros.length === 0">
