@@ -1,0 +1,98 @@
+<div class="w-full h-full flex flex-col animate-fade-in">
+  
+  <div class="w-full flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6 mb-8">
+    
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full xl:w-auto">
+      <button (click)="clicouEmVoltar()" class="shrink-0 flex items-center justify-center w-11 h-11 rounded-full border-2 border-zinc-500 hover:border-sky-500 hover:bg-sky-50 text-black transition-all outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+      <h2 class="text-black text-3xl font-bold font-['Poppins']">
+        Histórico de Baixas: <span class="text-zinc-500 font-medium">{{ item?.nome }}</span>
+      </h2>
+    </div>
+
+    <div class="flex items-center gap-1 shrink-0">
+      <span class="text-black text-lg md:text-xl font-bold font-['Poppins']">Ordenar por:</span>
+      <div class="relative w-56 h-11">
+        <select [(ngModel)]="sortBy" (change)="applyFiltersAndSort()" class="w-full h-full px-3 pr-10 rounded-2xl border-2 border-zinc-500 bg-transparent outline-none text-zinc-600 text-base font-normal font-['Poppins'] cursor-pointer hover:border-sky-500 transition-colors appearance-none">
+          <option value="Data da baixa">Data da baixa</option>
+          <option value="Responsável">Responsável</option>
+          <option value="Quantidade">Quantidade</option>
+        </select>
+        <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-600 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+      </div>
+      
+      <button (click)="toggleSortDirection()" class="flex flex-col items-center justify-center w-11 h-11 rounded-2xl border-2 border-zinc-500 hover:border-sky-500 transition-colors cursor-pointer outline-none bg-white bg-opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 -mb-[2px]" [ngClass]="!sortDesc ? 'text-black' : 'text-zinc-300'">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4" [ngClass]="sortDesc ? 'text-black' : 'text-zinc-300'">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        </svg>
+      </button>
+    </div>
+    
+  </div>
+
+  <div class="w-full flex-1 overflow-x-auto">
+    <table class="w-full min-w-[800px] border-collapse table-fixed">
+      <thead>
+        <tr class="bg-sky-300 text-black text-lg md:text-xl font-medium font-['Poppins']">
+          <th class="py-3 px-6 text-left rounded-l-2xl w-1/5">Data da baixa</th>
+          <th class="py-3 px-6 text-left w-1/5">Lote</th>
+          <th class="py-3 px-6 text-left w-1/5">Motivo</th>
+          <th class="py-3 px-6 text-left w-1/5">Responsável</th>
+          <th class="py-3 px-6 text-left rounded-r-2xl w-1/5">Quantidade</th>
+        </tr>
+      </thead>
+      <tbody class="text-black text-base md:text-lg font-medium font-['Poppins']">
+        
+        <tr *ngFor="let detalhe of paginatedDetalhes" class="border-b border-black/20 hover:bg-slate-50 transition-colors">
+          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.dataBaixa">{{ detalhe.dataBaixa | date:'dd/MM/yyyy' }}</td>
+          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.lote">#{{ detalhe.lote }}</td>
+          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.motivo">{{ detalhe.motivo }}</td>
+          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.responsavel">{{ detalhe.responsavel }}</td>
+          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.quantidade">{{ detalhe.quantidade }}</td>
+        </tr>
+
+        <tr *ngIf="filteredDetalhes.length === 0">
+          <td colspan="5" class="py-8 text-center text-zinc-500 font-medium">
+            Nenhum registro de baixa encontrado para este item.
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </div>
+
+  <div class="w-full flex justify-end items-center mt-6 gap-6 pt-4">
+    <span class="text-black text-lg font-bold font-['Poppins']">
+      {{ currentPage }} - {{ totalPages }}
+    </span>
+
+    <div class="flex items-center gap-4">
+      <button 
+        [disabled]="currentPage === 1"
+        (click)="prevPage()"
+        class="flex items-center justify-center transition-all outline-none"
+        [ngClass]="currentPage === 1 ? 'text-zinc-300 cursor-not-allowed' : 'text-black hover:scale-110 cursor-pointer'">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 rotate-180">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5L15.75 12L8.25 19.5" />
+        </svg>
+      </button>
+
+      <button 
+        [disabled]="currentPage === totalPages || totalPages === 0"
+        (click)="nextPage()"
+        class="flex items-center justify-center transition-all outline-none"
+        [ngClass]="(currentPage === totalPages || totalPages === 0) ? 'text-zinc-300 cursor-not-allowed' : 'text-black hover:scale-110 cursor-pointer'">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5L15.75 12L8.25 19.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</div>

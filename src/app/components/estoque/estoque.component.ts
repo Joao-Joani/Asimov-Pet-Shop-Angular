@@ -22,6 +22,9 @@ export class EstoqueComponent implements OnInit {
   itemsPerPage: number = 5;
   totalPages: number = 1;
 
+  // Variável para armazenar o item clicado e controlar o que aparece na tela
+  itemSelecionado: any = null;
+
   constructor(private layoutService: LayoutService) {}
 
   ngOnInit(): void {
@@ -39,6 +42,16 @@ export class EstoqueComponent implements OnInit {
     ];
     
     this.applyFiltersAndSort();
+  }
+
+  // Função disparada ao clicar na linha da tabela
+  abrirDetalhes(item: any): void {
+    this.itemSelecionado = item;
+  }
+
+  // Função disparada pelo botão voltar do componente filho
+  fecharDetalhes(): void {
+    this.itemSelecionado = null;
   }
 
   toggleSortDirection(): void {
