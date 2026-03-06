@@ -44,7 +44,18 @@ export class UsersService {
     });
 
     return this.firestore.collection('funcionarios').doc(user.email).update({ nome: nome });
+  }
 
-    console.log(user?.email);
+  editUser(user: any){
+    try {
+      this.firestore.collection('funcionarios').doc(user.email).update({
+        nome: user.nome,
+        codFunc: user.codFunc,
+        perfil: user.perfil
+      });
+      alert('Usuário atualizado');
+    } catch(error) {
+      console.log(error);
+    }
   }
 }

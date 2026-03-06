@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../../shared/services/layout.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { UsersService } from '../../shared/services/users.service';
-import { user } from '@angular/fire/auth';
 import { UserRole } from '../../shared/enums/user-roles';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-usuarios',
@@ -39,7 +37,7 @@ export class UsuariosComponent implements OnInit {
     user.codFunc = value.replace('#', '')
   }
 
-  constructor(private usersService: UsersService, private layoutService: LayoutService, private firestore: AngularFirestore) {}
+  constructor(private usersService: UsersService, private layoutService: LayoutService) {}
 
   ngOnInit(): void {
     this.tituloAtual$ = this.layoutService.tituloAtual$;
@@ -116,7 +114,7 @@ export class UsuariosComponent implements OnInit {
     this.editId = null;
   }
 
-  async salvar(user: any){
+  salvar(user: any){
     console.log(user);
 
     const codDuplicado = this.users.some(
@@ -133,17 +131,9 @@ export class UsuariosComponent implements OnInit {
       return; // não salva
     }
 
-    try {
-      await this.firestore.collection('funcionarios').doc(user.email).update({
-        nome: user.nome,
-        codFunc: user.codFunc,
-        perfil: user.perfil
-      });
-      alert('Usuário atualizado')
-      this.editId = null;
-    } catch(error) {
-      console.log(error);
-    }
+    this.usersService.editUser(user);
+
+    this.editId = null;
 
   }
 }
