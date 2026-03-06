@@ -15,7 +15,7 @@ export class UsersService {
 
   getAllUsers(): Observable<any[]> {
     return this.firestore
-    .collection('funcionarios', ref => 
+    .collection('funcionarios', ref =>
     ref.where('perfil', '!=', UserRole.admin))
     .valueChanges({ idField: 'email' });
   }
@@ -46,16 +46,11 @@ export class UsersService {
     return this.firestore.collection('funcionarios').doc(user.email).update({ nome: nome });
   }
 
-  editUser(user: any){
-    try {
-      this.firestore.collection('funcionarios').doc(user.email).update({
-        nome: user.nome,
-        codFunc: user.codFunc,
-        perfil: user.perfil
-      });
-      alert('Usuário atualizado');
-    } catch(error) {
-      console.log(error);
-    }
+  editUser(user: any) {
+    return this.firestore.collection('funcionarios').doc(user.email).update({
+      nome: user.nome,
+      codFunc: user.codFunc,
+      perfil: user.perfil
+    });
   }
 }

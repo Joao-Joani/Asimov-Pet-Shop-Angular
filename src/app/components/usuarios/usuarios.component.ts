@@ -24,17 +24,21 @@ export class UsuariosComponent implements OnInit {
 
   perfis = Object.values(UserRole).filter(p => p !== UserRole.admin);
 
+  toastMessage: string = '';
+  toastType: 'success' | 'error' = 'success';
+  showToast: boolean = false;
+  toastTimeout: any;
+  isSaving: boolean = false;
+
   getCodFunc(user: any) {
-    // se a linha está sendo editada, mostra vazio no input
     if (this.editId === user.email) {
-      return user.codFunc || ''; // deixa vazio enquanto edita
+      return user.codFunc || '';
     }
-    // se não está editando, mostra # quando estiver vazio
     return user.codFunc ? user.codFunc : '#';
   }
 
   setCodFunc(user: any, value: string) {
-    user.codFunc = value.replace('#', '')
+    user.codFunc = value.replace('#', '');
   }
 
   constructor(private usersService: UsersService, private layoutService: LayoutService) {}
@@ -49,14 +53,12 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
-  // Função disparada a cada letra digitada
   filterUsers(): void {
     const term = this.searchTerm.toLowerCase().trim();
     
     if (!term) {
       this.filteredUsers = this.users;
     } else {
-      // Filtra checando se o termo digitado existe no nome, email, perfil ou CodFunc
       this.filteredUsers = this.users.filter(user => 
         user.nome?.toLowerCase().includes(term) ||
         user.email?.toLowerCase().includes(term) ||
@@ -69,12 +71,10 @@ export class UsuariosComponent implements OnInit {
     this.atualizarPaginacao();
   }
 
-  // Recalcula o total de páginas baseado na lista filtrada
   atualizarPaginacao(): void {
     this.totalPages = Math.ceil(this.filteredUsers.length / this.itemsPerPage) || 1; 
   }
 
-  // Agora busca na lista filtrada (filteredUsers) em vez da lista global
   get paginatedUsers(): any[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
@@ -94,46 +94,62 @@ export class UsuariosComponent implements OnInit {
   }
 
   edit = false;
-
   bkpUsers: any[] = [];
-
   editId: string | null = null;
-
+  
   editUser(user: any) {
-
     this.editId = user.email;
-    
     this.bkpUsers = structuredClone(this.filteredUsers);
-
   }
 
   cancelEdit() {
-    
+    if (this.isSaving) return;
     this.filteredUsers = structuredClone(this.bkpUsers);
-
     this.editId = null;
   }
 
-  salvar(user: any){
-    console.log(user);
+  exibirToast(mensagem: string, tipo: 'success' | 'error' = 'success') {
+    this.toastMessage = mensagem;
+    this.toastType = tipo;
+    this.showToast = true;
+
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
+    }
+
+    this.toastTimeout = setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
+
+  async salvar(user: any){
+    if (this.isSaving) return;
 
     const codDuplicado = this.users.some(
-    u => u.codFunc === user.codFunc && u.email !== user.email
+      u => u.codFunc === user.codFunc && u.email !== user.email
     );
 
     if(!user.nome){
-      alert('Campo nome está vazio');
-      return
+      this.exibirToast('O campo nome não pode ficar vazio!', 'error');
+      return;
     }
 
     if (codDuplicado) {
-      alert('Esse código já está em uso por outro usuário!');
-      return; // não salva
+      this.exibirToast('Esse código de crachá já está em uso!', 'error');
+      return;
     }
 
-    this.usersService.editUser(user);
+    this.isSaving = true;
 
-    this.editId = null;
-
+    try {
+      await this.usersService.editUser(user);
+      this.editId = null;
+      this.exibirToast('Usuário atualizado com sucesso!', 'success');
+    } catch (error) {
+      console.error(error);
+      this.exibirToast('Erro ao atualizar usuário!', 'error');
+    } finally {
+      this.isSaving = false;
+    }
   }
 }

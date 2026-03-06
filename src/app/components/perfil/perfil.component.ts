@@ -11,10 +11,8 @@ import { LayoutService } from '../../shared/services/layout.service';
 export class PerfilComponent implements OnInit {
 
   tituloAtual$!: Observable<string>;
+  user: any;
 
-  user: any
-
-  // Dados genéricos simulando o que virá do banco de dados
   userData = {
     firstName: '',
     lastName: '',
@@ -22,9 +20,13 @@ export class PerfilComponent implements OnInit {
     cargo: ''
   };
 
-  // Variáveis booleanas para controlar o estado dos campos (bloqueado/liberado)
   isEditingFirstName: boolean = false;
   isEditingLastName: boolean = false;
+  isSaving: boolean = false;
+  toastMessage: string = '';
+  toastType: 'success' | 'error' = 'success';
+  showToast: boolean = false;
+  toastTimeout: any;
 
   constructor(
     private userService: UsersService, 
@@ -34,14 +36,15 @@ export class PerfilComponent implements OnInit {
   ngOnInit(): void {
     this.tituloAtual$ = this.layoutService.tituloAtual$;
     this.userService.getMyUser().subscribe(user => {
-      this.user = user;
-      [this.userData.firstName, this.userData.lastName] = this.user.nome.split(" ")
-      this.userData.email = this.user.email;
-      this.userData.cargo = this.user.perfil;
+      if(user) {
+        this.user = user;
+        [this.userData.firstName, this.userData.lastName] = this.user.nome.split(" ");
+        this.userData.email = this.user.email;
+        this.userData.cargo = this.user.perfil;
+      }
     });
   }
 
-  // Funções que o HTML chama quando você clica no ícone de lápis
   toggleEditFirstName(): void {
     this.isEditingFirstName = !this.isEditingFirstName;
   }
@@ -50,27 +53,44 @@ export class PerfilComponent implements OnInit {
     this.isEditingLastName = !this.isEditingLastName;
   }
 
-  // Função chamada ao clicar em "Salvar alterações"
-  salvarAlteracoes(): void {
-    // Aqui entrará a requisição para salvar no Firebase
-    //console.log('Dados salvos:', this.userData);
+  exibirToast(mensagem: string, tipo: 'success' | 'error' = 'success') {
+    this.toastMessage = mensagem;
+    this.toastType = tipo;
+    this.showToast = true;
 
-    const nome = this.userData.firstName + ' ' + this.userData.lastName
-
-    console.log(nome);
-
-    if(!this.userData.firstName || !this.userData.lastName){
-      alert('Nome ou Sobrenome vazios');
-      return
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
     }
 
-    this.userService.alterarPerfil(nome);
+    this.toastTimeout = setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
 
-    // Bloqueia os campos de nome novamente após salvar
-    this.isEditingFirstName = false;
-    this.isEditingLastName = false;
-    
-    // Um aviso visual para testes
-    alert('Alterações salvas com sucesso!');
+  async salvarAlteracoes(): Promise<void> {
+    if (this.isSaving) return; 
+
+    const nome = this.userData.firstName + ' ' + this.userData.lastName;
+
+    if(!this.userData.firstName || !this.userData.lastName){
+      this.exibirToast('Nome ou Sobrenome não podem ficar vazios!', 'error');
+      return;
+    }
+
+    this.isSaving = true;
+
+    try {
+      await this.userService.alterarPerfil(nome);
+
+      this.isEditingFirstName = false;
+      this.isEditingLastName = false;
+      
+      this.exibirToast('Alterações salvas com sucesso!', 'success');
+    } catch (error) {
+      console.error(error);
+      this.exibirToast('Erro ao salvar as alterações!', 'error');
+    } finally {
+      this.isSaving = false;
+    }
   }
 }
