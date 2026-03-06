@@ -22,7 +22,7 @@ export class PerfilComponent implements OnInit {
 
   isEditingFirstName: boolean = false;
   isEditingLastName: boolean = false;
-  isSaving: boolean = false;
+  isSaving: boolean = false;  
   toastMessage: string = '';
   toastType: 'success' | 'error' = 'success';
   showToast: boolean = false;
@@ -38,7 +38,11 @@ export class PerfilComponent implements OnInit {
     this.userService.getMyUser().subscribe(user => {
       if(user) {
         this.user = user;
-        [this.userData.firstName, this.userData.lastName] = this.user.nome.split(" ");
+        
+        const nomeArray = this.user.nome.split(" ");
+        this.userData.firstName = nomeArray[0] || '';
+        this.userData.lastName = nomeArray.slice(1).join(" ") || '';
+        
         this.userData.email = this.user.email;
         this.userData.cargo = this.user.perfil;
       }
@@ -51,6 +55,19 @@ export class PerfilComponent implements OnInit {
 
   toggleEditLastName(): void {
     this.isEditingLastName = !this.isEditingLastName;
+  }
+
+  cancelEdit(): void {
+    if (this.isSaving) return;
+
+    if (this.user && this.user.nome) {
+      const nomeArray = this.user.nome.split(" ");
+      this.userData.firstName = nomeArray[0] || '';
+      this.userData.lastName = nomeArray.slice(1).join(" ") || '';
+    }
+    
+    this.isEditingFirstName = false;
+    this.isEditingLastName = false;
   }
 
   exibirToast(mensagem: string, tipo: 'success' | 'error' = 'success') {
@@ -70,7 +87,7 @@ export class PerfilComponent implements OnInit {
   async salvarAlteracoes(): Promise<void> {
     if (this.isSaving) return; 
 
-    const nome = this.userData.firstName + ' ' + this.userData.lastName;
+    const nome = this.userData.firstName.trim() + ' ' + this.userData.lastName.trim();
 
     if(!this.userData.firstName || !this.userData.lastName){
       this.exibirToast('Nome ou Sobrenome não podem ficar vazios!', 'error');
