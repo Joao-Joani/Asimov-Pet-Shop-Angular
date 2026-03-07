@@ -45,4 +45,10 @@ export class LoginComponent {
     }
   }
 
+  authGoogle(){
+
+    this.authService.loginGoogle();
+    
+  }
+
 }

@@ -3,6 +3,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { UserInterface } from '../interfaces/user-interface';
+import firebase from 'firebase/compat/app';
+import { UserRole } from '../enums/user-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -70,4 +72,35 @@ export class AuthService {
       throw error;
     }
   }
+
+  async loginGoogle() {
+
+    try {
+
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      const cred = await this.auth.signInWithPopup(provider);
+
+      const user = cred.user;
+
+      if(!user?.email) return;
+
+      const doc = await this.firestore.collection('funcionarios').doc(user.email).ref.get();
+
+      if(!doc.exists) {
+        await this.salvarDados(user.email, {
+          nome: user.displayName ?? '',
+          email: user.email,
+          perfil: UserRole.leitor
+        });
+      }
+
+      this.router.navigate(['/inicio']);
+
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
 }

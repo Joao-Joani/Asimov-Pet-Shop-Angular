@@ -72,4 +72,10 @@ export class CadastroComponent {
     }
   }
 
+  authGoogle(){
+
+    this.authService.loginGoogle();
+    
+  }
+
 }
