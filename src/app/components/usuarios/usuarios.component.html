@@ -68,9 +68,9 @@
                   <td class="py-4 px-6 truncate" [title]="user.nome">
                     <input
                       [(ngModel)]="user.nome"
-                      [disabled]="editId !== user.email"
+                      disabled
                       [ngClass]="{
-                        'text-sky-700 font-semibold bg-white/60 focus:bg-white focus:shadow-sm px-2 py-1': editId === user.email,
+                        'text-zinc-400 cursor-not-allowed px-2 py-1': editId === user.email,
                         'text-zinc-700 px-0 cursor-default': editId !== user.email
                       }"
                       class="bg-transparent w-full outline-none rounded-md transition-colors truncate"

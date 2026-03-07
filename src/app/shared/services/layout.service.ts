@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { UserRole } from '../enums/user-roles';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class LayoutService {
   public menuItems = [
     { nome: 'Inicio', rota: '/inicio', icone: '../../../assets/icons/casa.png' },
     { nome: 'Perfil', rota: '/perfil', icone: '../../../assets/icons/perfil.png' },
-    { nome: 'Usuários', rota: '/usuarios', icone: '../../../assets/icons/usuarios.png' },
+    { nome: 'Usuários', rota: '/usuarios', icone: '../../../assets/icons/usuarios.png', permissao: [UserRole.admin] },
     { nome: 'Produtos', rota: '/produtos', icone: '../../../assets/icons/caixa.png' },
     { nome: 'Estoque', rota: '/estoque', icone: '../../../assets/icons/armazem.png' },
     { nome: 'Registros', rota: '/registros', icone: '../../../assets/icons/bloco_notas.png' }
@@ -38,5 +39,12 @@ export class LayoutService {
       // Emite o novo título para quem estiver a escutar
       this.tituloAtualSubject.next(itemAtivo.nome);
     }
+  }
+
+  filtraMenu(perfil: UserRole){
+    return this.menuItems.filter(item => {
+      if(!item.permissao) return true;
+      return item.permissao.includes(perfil);
+    })
   }
 }

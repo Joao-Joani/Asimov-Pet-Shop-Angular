@@ -53,4 +53,12 @@ export class UsersService {
       perfil: user.perfil
     });
   }
+
+  getUsuarioLogado() {
+    return this.auth.authState;
+  }
+
+  getFuncionario(email: string) {
+    return this.firestore.collection('funcionarios').doc(email).valueChanges();
+  }
 }
