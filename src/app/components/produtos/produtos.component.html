@@ -89,7 +89,7 @@
                 
                 <tr *ngFor="let product of paginatedProducts" class="border-b border-black/20 hover:bg-slate-50 transition-colors">
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="product.nome">{{ product.nome }}</td>
-                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="product.dataCadastro">{{ product.dataCadastro | date:'dd/MM/yyyy' }}</td>
+                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="product.dataCad">{{ product.dataCad | date:'dd/MM/yyyy' }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="product.tipo">{{ product.tipo }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="product.preco">{{ product.preco | currency:'BRL' }}</td>
                 </tr>

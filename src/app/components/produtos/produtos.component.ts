@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../../shared/services/layout.service';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
+import { ProdutosService } from '../../shared/services/produtos.service';
 
 @Component({
   selector: 'app-produtos',
@@ -23,23 +24,26 @@ export class ProdutosComponent implements OnInit {
   itemsPerPage: number = 5;
   totalPages: number = 1;
 
-  constructor(private layoutService: LayoutService) {}
+  constructor(
+    private layoutService: LayoutService, 
+    private produtosService: ProdutosService
+  ) {}
 
   ngOnInit(): void {
     this.tituloAtual$ = this.layoutService.tituloAtual$;
 
-    // Mock para testes
-    this.produtos = [
-      { nome: 'Ração Premium Dog', dataCadastro: '2026-03-01T10:00:00', dataUltimaEdicao: '2026-03-10T15:00:00', tipo: 'Físico', preco: 150.00 },
-      { nome: 'E-book: Como adestrar', dataCadastro: '2026-03-02T14:30:00', dataUltimaEdicao: '2026-03-02T14:30:00', tipo: 'Digital', preco: 89.90 },
-      { nome: 'Banho e Tosa Completo', dataCadastro: '2026-03-04T08:15:00', dataUltimaEdicao: '2026-03-05T09:00:00', tipo: 'Serviço', preco: 60.00 },
-      { nome: 'Coleira Azul', dataCadastro: '2026-03-05T11:20:00', dataUltimaEdicao: '2026-03-12T11:20:00', tipo: 'Físico', preco: 45.50 },
-      { nome: 'Consulta Veterinária', dataCadastro: '2026-03-06T09:00:00', dataUltimaEdicao: '2026-03-06T09:00:00', tipo: 'Serviço', preco: 120.00 },
-      { nome: 'Brinquedo Mordedor', dataCadastro: '2026-03-07T16:45:00', dataUltimaEdicao: '2026-03-09T16:45:00', tipo: 'Físico', preco: 25.00 },
-      { nome: 'Ração Gatos', dataCadastro: '2026-03-08T13:10:00', dataUltimaEdicao: '2026-03-15T10:00:00', tipo: 'Físico', preco: 110.00 }
-    ];
-    
-    this.applyFiltersAndSort();
+    this.produtosService.getAllProdutos().subscribe(data => {
+      this.produtos = data.map(p => {
+        return {
+          ...p,
+          dataCad: p.dataCad?.toDate ? p.dataCad.toDate() : p.dataCad,
+          dataEdit: p.dataEdit?.toDate ? p.dataEdit.toDate() : p.dataEdit
+        };
+      });
+      
+      this.filteredProducts = [...this.produtos];
+      this.applyFiltersAndSort();
+    });
   }
 
   toggleSortDirection(): void {
@@ -55,20 +59,18 @@ export class ProdutosComponent implements OnInit {
     
     if (term) {
       result = result.filter(p => {
-        // Formata a data para dd/mm/yyyy para que a busca em texto funcione
-        const dateStr = new Date(p.dataCadastro).toLocaleDateString('pt-BR');
+        const dateStr = p.dataCad ? new Date(p.dataCad).toLocaleDateString('pt-BR') : '';
+        const nomeLower = p.nome ? p.nome.toLowerCase() : '';
+        const tipoLower = p.tipo ? p.tipo.toLowerCase() : '';
         
         if (this.filterType === 'Nome do produto') {
-          return p.nome?.toLowerCase().includes(term);
+          return nomeLower.includes(term);
         } else if (this.filterType === 'Tipo') {
-          return p.tipo?.toLowerCase().includes(term);
+          return tipoLower.includes(term);
         } else if (this.filterType === 'Data de cadastro') {
           return dateStr.includes(term);
         } else {
-          // 'Todos' procura no nome, tipo e na data formatada
-          return p.nome?.toLowerCase().includes(term) || 
-                 p.tipo?.toLowerCase().includes(term) ||
-                 dateStr.includes(term);
+          return nomeLower.includes(term) || tipoLower.includes(term) || dateStr.includes(term);
         }
       });
     }
@@ -78,17 +80,17 @@ export class ProdutosComponent implements OnInit {
       let valorA, valorB;
 
       if (this.sortBy === 'Nome') {
-        valorA = a.nome.toLowerCase();
-        valorB = b.nome.toLowerCase();
+        valorA = a.nome ? a.nome.toLowerCase() : '';
+        valorB = b.nome ? b.nome.toLowerCase() : '';
       } else if (this.sortBy === 'Data') {
-        valorA = new Date(a.dataCadastro).getTime();
-        valorB = new Date(b.dataCadastro).getTime();
+        valorA = a.dataCad ? new Date(a.dataCad).getTime() : 0;
+        valorB = b.dataCad ? new Date(b.dataCad).getTime() : 0;
       } else if (this.sortBy === 'Preço') {
-        valorA = a.preco;
-        valorB = b.preco;
+        valorA = a.preco || 0;
+        valorB = b.preco || 0;
       } else if (this.sortBy === 'Data da última edição') {
-        valorA = new Date(a.dataUltimaEdicao).getTime();
-        valorB = new Date(b.dataUltimaEdicao).getTime();
+        valorA = a.dataEdit ? new Date(a.dataEdit).getTime() : 0;
+        valorB = b.dataEdit ? new Date(b.dataEdit).getTime() : 0;
       }
 
       if (valorA < valorB) return this.sortDesc ? 1 : -1;
