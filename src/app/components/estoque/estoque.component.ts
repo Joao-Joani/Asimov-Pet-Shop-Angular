@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LayoutService } from '../../shared/services/layout.service';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs'; // <-- Adicionado combineLatest
+import { EstoqueService } from '../../shared/services/estoque.service';
+import { ProdutosService } from '../../shared/services/produtos.service'; // <-- Importado o serviço de produtos
 
 @Component({
   selector: 'app-estoque',
@@ -22,34 +24,47 @@ export class EstoqueComponent implements OnInit {
   itemsPerPage: number = 5;
   totalPages: number = 1;
 
-  // Variável para armazenar o item clicado e controlar o que aparece na tela
   itemSelecionado: any = null;
 
-  constructor(private layoutService: LayoutService) {}
+  constructor(
+    private layoutService: LayoutService,
+    private estoqueService: EstoqueService,
+    private produtosService: ProdutosService
+  ) {}
 
   ngOnInit(): void {
     this.tituloAtual$ = this.layoutService.tituloAtual$;
 
-    // Mock para testes
-    this.estoque = [
-      { nome: 'Ração Premium Dog', lote: 'LT-1045', dataCadastro: '2026-03-01T10:00:00', dataUltimaEdicao: '2026-03-10T15:00:00', tipo: 'Físico', quantidade: 50 },
-      { nome: 'E-book: Como adestrar', lote: 'LT-0000', dataCadastro: '2026-03-02T14:30:00', dataUltimaEdicao: '2026-03-02T14:30:00', tipo: 'Digital', quantidade: 99 },
-      { nome: 'Banho e Tosa Completo', lote: 'SRV-01', dataCadastro: '2026-03-04T08:15:00', dataUltimaEdicao: '2026-03-05T09:00:00', tipo: 'Serviço', quantidade: 99 },
-      { nome: 'Coleira Azul', lote: 'LT-2098', dataCadastro: '2026-03-05T11:20:00', dataUltimaEdicao: '2026-03-12T11:20:00', tipo: 'Físico', quantidade: 15 },
-      { nome: 'Consulta Veterinária', lote: 'SRV-02', dataCadastro: '2026-03-06T09:00:00', dataUltimaEdicao: '2026-03-06T09:00:00', tipo: 'Serviço', quantidade: 99 },
-      { nome: 'Brinquedo Mordedor', lote: 'LT-3301', dataCadastro: '2026-03-07T16:45:00', dataUltimaEdicao: '2026-03-09T16:45:00', tipo: 'Físico', quantidade: 32 },
-      { nome: 'Ração Gatos', lote: 'LT-1050', dataCadastro: '2026-03-08T13:10:00', dataUltimaEdicao: '2026-03-15T10:00:00', tipo: 'Físico', quantidade: 8 }
-    ];
-    
-    this.applyFiltersAndSort();
+    combineLatest([
+      this.estoqueService.getAllEstoque(),
+      this.produtosService.getAllProdutos()
+    ]).subscribe({
+      next: ([estoqueData, produtosData]) => {
+        this.estoque = estoqueData.map(item => {
+          const produtoRelacionado = produtosData.find(p => p.id === item.produto);
+          return {
+            ...item,
+            dataCad: item.dataCad?.toDate ? item.dataCad.toDate() : item.dataCad,
+            dataUltEdit: item.dataUltEdit?.toDate ? item.dataUltEdit.toDate() : item.dataUltEdit,
+            dataVal: item.dataVal?.toDate ? item.dataVal.toDate() : item.dataVal,
+            nomeProduto: produtoRelacionado ? produtoRelacionado.nome : 'Produto não encontrado',
+            tipoProduto: produtoRelacionado ? produtoRelacionado.tipo : 'Sem tipo'
+          };
+        });
+
+        this.filteredEstoque = [...this.estoque];
+        this.applyFiltersAndSort(); 
+      },
+      error: (erro) => {
+        console.error("ERRO FIREBASE - CRUZAMENTO ESTOQUE/PRODUTO:", erro);
+      }
+    });
   }
 
-  // Função disparada ao clicar na linha da tabela
   abrirDetalhes(item: any): void {
     this.itemSelecionado = item;
   }
 
-  // Função disparada pelo botão voltar do componente filho
   fecharDetalhes(): void {
     this.itemSelecionado = null;
   }
@@ -66,19 +81,23 @@ export class EstoqueComponent implements OnInit {
     
     if (term) {
       result = result.filter(item => {
-        const dateStr = new Date(item.dataCadastro).toLocaleDateString('pt-BR');
+        const dateStr = item.dataCad ? new Date(item.dataCad).toLocaleDateString('pt-BR') : '';
+        const produtoLower = item.nomeProduto ? item.nomeProduto.toLowerCase() : '';
+        const loteLower = item.lote ? item.lote.toLowerCase() : '';
+        const tipoLower = item.tipoProduto ? item.tipoProduto.toLowerCase() : '';
+
         if (this.filterType === 'Nome do produto') {
-          return item.nome?.toLowerCase().includes(term);
+          return produtoLower.includes(term);
         } else if (this.filterType === 'Lote') {
-          return item.lote?.toLowerCase().includes(term);
+          return loteLower.includes(term);
         } else if (this.filterType === 'Tipo') {
-          return item.tipo?.toLowerCase().includes(term);
+          return tipoLower.includes(term);
         } else if (this.filterType === 'Data de cadastro') {
           return dateStr.includes(term);
         } else {
-          return item.nome?.toLowerCase().includes(term) || 
-                 item.lote?.toLowerCase().includes(term) ||
-                 item.tipo?.toLowerCase().includes(term) ||
+          return produtoLower.includes(term) || 
+                 loteLower.includes(term) ||
+                 tipoLower.includes(term) ||
                  dateStr.includes(term);
         }
       });
@@ -86,22 +105,21 @@ export class EstoqueComponent implements OnInit {
     
     result.sort((a, b) => {
       let valorA, valorB;
-
       if (this.sortBy === 'Nome') {
-        valorA = a.nome.toLowerCase();
-        valorB = b.nome.toLowerCase();
+        valorA = a.nomeProduto ? a.nomeProduto.toLowerCase() : '';
+        valorB = b.nomeProduto ? b.nomeProduto.toLowerCase() : '';
       } else if (this.sortBy === 'Lote') {
-        valorA = a.lote.toLowerCase();
-        valorB = b.lote.toLowerCase();
+        valorA = a.lote ? a.lote.toLowerCase() : '';
+        valorB = b.lote ? b.lote.toLowerCase() : '';
       } else if (this.sortBy === 'Data') {
-        valorA = new Date(a.dataCadastro).getTime();
-        valorB = new Date(b.dataCadastro).getTime();
+        valorA = a.dataCad ? new Date(a.dataCad).getTime() : 0;
+        valorB = b.dataCad ? new Date(b.dataCad).getTime() : 0;
       } else if (this.sortBy === 'Quantidade') {
-        valorA = a.quantidade;
-        valorB = b.quantidade;
+        valorA = a.qtd || 0;
+        valorB = b.qtd || 0;
       } else if (this.sortBy === 'Data da última edição') {
-        valorA = new Date(a.dataUltimaEdicao).getTime();
-        valorB = new Date(b.dataUltimaEdicao).getTime();
+        valorA = a.dataUltEdit ? new Date(a.dataUltEdit).getTime() : 0;
+        valorB = b.dataUltEdit ? new Date(b.dataUltEdit).getTime() : 0;
       }
 
       if (valorA < valorB) return this.sortDesc ? 1 : -1;

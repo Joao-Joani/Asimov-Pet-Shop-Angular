@@ -95,11 +95,11 @@
                   <tr *ngFor="let item of paginatedEstoque" 
                       (click)="abrirDetalhes(item)"
                       class="border-b border-black/20 hover:bg-slate-50 transition-colors cursor-pointer">
-                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.nome">{{ item.nome }}</td>
+                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.nomeProduto">{{ item.nomeProduto }}</td>
                     <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.lote">#{{ item.lote }}</td>
-                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.dataCadastro">{{ item.dataCadastro | date:'dd/MM/yyyy' }}</td>
-                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.tipo">{{ item.tipo }}</td>
-                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.quantidade">{{ item.quantidade }}</td>
+                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.dataCad">{{ item.dataCad | date:'dd/MM/yyyy' }}</td>
+                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.tipoProduto">{{ item.tipoProduto }}</td>
+                    <td class="py-4 px-6 text-zinc-700 truncate" [title]="item.qtd">{{ item.qtd }}</td>
                   </tr>
 
                   <tr *ngIf="filteredEstoque.length === 0">
