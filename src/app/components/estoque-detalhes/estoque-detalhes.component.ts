@@ -1,4 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { combineLatest } from 'rxjs';
+import { BaixasService } from '../../shared/services/baixas.service';
+import { UsersService } from '../../shared/services/users.service';
 
 @Component({
   selector: 'app-estoque-detalhes',
@@ -7,7 +10,6 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 })
 export class EstoqueDetalhesComponent implements OnInit {
   
-  // Recebe o item inteiro do componente pai
   @Input() item: any;
   
   // Avisa o componente pai que o botão "Voltar" foi clicado
@@ -23,17 +25,39 @@ export class EstoqueDetalhesComponent implements OnInit {
   itemsPerPage: number = 5;
   totalPages: number = 1;
 
+  constructor(
+    private baixasService: BaixasService,
+    private usersService: UsersService
+  ) {}
+
   ngOnInit(): void {
-    // Mock de dados
-    this.detalhes = [
-      { dataBaixa: '2026-03-05T10:00:00', lote: this.item?.lote || '0000', motivo: 'Venda de Balcão', responsavel: 'João', quantidade: 1 },
-      { dataBaixa: '2026-02-20T14:30:00', lote: this.item?.lote || '0000', motivo: 'Produto Danificado', responsavel: 'Maria', quantidade: 2 },
-      { dataBaixa: '2026-01-15T09:15:00', lote: this.item?.lote || '0000', motivo: 'Venda Online', responsavel: 'Pedro', quantidade: 3 },
-      { dataBaixa: '2026-02-12T09:12:00', lote: this.item?.lote || '0000', motivo: 'Venda Online', responsavel: 'Ana', quantidade: 3 },
-      { dataBaixa: '2026-01-06T09:16:00', lote: this.item?.lote || '0000', motivo: 'Venda de Balcão', responsavel: 'João', quantidade: 3 }
-    ];
-    
-    this.applyFiltersAndSort();
+    // Busca as baixas e os usuários ao mesmo tempo
+    combineLatest([
+      this.baixasService.getAllBaixas(),
+      this.usersService.getAllUsers()
+    ]).subscribe({
+      next: ([baixasData, usersData]) => {
+        
+        // Filtramos para pegar APENAS as baixas deste item específico do estoque
+        const baixasDesteItem = baixasData.filter(b => b.itemEstId === this.item?.id);
+
+        // Mapeamos os dados para tratar a data e cruzar o nome do usuário
+        this.detalhes = baixasDesteItem.map(b => {
+          const usuarioItem = usersData.find(u => u.email === b.user);
+
+          return {
+            ...b,
+            dataBaixa: b.data?.toDate ? b.data.toDate() : b.data,
+            nomeResponsavel: usuarioItem ? usuarioItem.nome : (b.user || 'Desconhecido')
+          };
+        });
+        
+        this.applyFiltersAndSort();
+      },
+      error: (erro) => {
+        console.error("ERRO FIREBASE - HISTÓRICO DE BAIXAS:", erro);
+      }
+    });
   }
 
   clicouEmVoltar(): void {
@@ -52,14 +76,14 @@ export class EstoqueDetalhesComponent implements OnInit {
       let valorA, valorB;
 
       if (this.sortBy === 'Data da baixa') {
-        valorA = new Date(a.dataBaixa).getTime();
-        valorB = new Date(b.dataBaixa).getTime();
+        valorA = a.dataBaixa ? new Date(a.dataBaixa).getTime() : 0;
+        valorB = b.dataBaixa ? new Date(b.dataBaixa).getTime() : 0;
       } else if (this.sortBy === 'Responsável') {
-        valorA = a.responsavel.toLowerCase();
-        valorB = b.responsavel.toLowerCase();
+        valorA = a.nomeResponsavel ? a.nomeResponsavel.toLowerCase() : '';
+        valorB = b.nomeResponsavel ? b.nomeResponsavel.toLowerCase() : '';
       } else if (this.sortBy === 'Quantidade') {
-        valorA = a.quantidade;
-        valorB = b.quantidade;
+        valorA = a.qtd || 0;
+        valorB = b.qtd || 0;
       }
 
       if (valorA < valorB) return this.sortDesc ? 1 : -1;

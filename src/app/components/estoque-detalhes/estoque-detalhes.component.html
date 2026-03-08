@@ -9,7 +9,7 @@
         </svg>
       </button>
       <h2 class="text-black text-3xl font-bold font-['Poppins']">
-        Histórico de Baixas: <span class="text-zinc-500 font-medium">{{ item?.nome }}</span>
+        Histórico de Baixas: <span class="text-zinc-500 font-medium">{{ item?.nomeProduto }}</span>
       </h2>
     </div>
 
@@ -40,25 +40,23 @@
     <table class="w-full min-w-[800px] border-collapse table-fixed">
       <thead>
         <tr class="bg-sky-300 text-black text-lg md:text-xl font-medium font-['Poppins']">
-          <th class="py-3 px-6 text-left rounded-l-2xl w-1/5">Data da baixa</th>
-          <th class="py-3 px-6 text-left w-1/5">Lote</th>
-          <th class="py-3 px-6 text-left w-1/5">Motivo</th>
-          <th class="py-3 px-6 text-left w-1/5">Responsável</th>
-          <th class="py-3 px-6 text-left rounded-r-2xl w-1/5">Quantidade</th>
+          <th class="py-3 px-6 text-left rounded-l-2xl w-1/4">Data da baixa</th>
+          <th class="py-3 px-6 text-left w-1/4">Motivo</th>
+          <th class="py-3 px-6 text-left w-1/4">Responsável</th>
+          <th class="py-3 px-6 text-left rounded-r-2xl w-1/4">Quantidade</th>
         </tr>
       </thead>
       <tbody class="text-black text-base md:text-lg font-medium font-['Poppins']">
         
         <tr *ngFor="let detalhe of paginatedDetalhes" class="border-b border-black/20 hover:bg-slate-50 transition-colors">
           <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.dataBaixa">{{ detalhe.dataBaixa | date:'dd/MM/yyyy' }}</td>
-          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.lote">#{{ detalhe.lote }}</td>
           <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.motivo">{{ detalhe.motivo }}</td>
-          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.responsavel">{{ detalhe.responsavel }}</td>
-          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.quantidade">{{ detalhe.quantidade }}</td>
+          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.nomeResponsavel">{{ detalhe.nomeResponsavel }}</td>
+          <td class="py-4 px-6 text-zinc-700 truncate" [title]="detalhe.qtd">{{ detalhe.qtd }}</td>
         </tr>
 
         <tr *ngIf="filteredDetalhes.length === 0">
-          <td colspan="5" class="py-8 text-center text-zinc-500 font-medium">
+          <td colspan="4" class="py-8 text-center text-zinc-500 font-medium">
             Nenhum registro de baixa encontrado para este item.
           </td>
         </tr>
