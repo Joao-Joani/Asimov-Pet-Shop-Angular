@@ -90,11 +90,11 @@
               <tbody class="text-black text-base md:text-lg font-medium font-['Poppins']">
                 
                 <tr *ngFor="let registro of paginatedRegistros" class="border-b border-black/20 hover:bg-slate-50 transition-colors">
-                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.nome">{{ registro.nome }}</td>
+                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.nomeProduto">{{ registro.nomeProduto }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.dataBaixa">{{ registro.dataBaixa | date:'dd/MM/yyyy' }}</td>
                   <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.motivo">{{ registro.motivo }}</td>
-                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.responsavel">{{ registro.responsavel }}</td>
-                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.quantidade">{{ registro.quantidade }}</td>
+                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.nomeResponsavel">{{ registro.nomeResponsavel }}</td>
+                  <td class="py-4 px-6 text-zinc-700 truncate" [title]="registro.qtd">{{ registro.qtd }}</td>
                 </tr>
 
                 <tr *ngIf="filteredRegistros.length === 0">
