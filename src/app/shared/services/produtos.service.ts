@@ -20,4 +20,10 @@ export class ProdutosService {
       .doc(id)
       .valueChanges({ idField: 'id' });
   }
+
+  getProdutosTotais(): Observable<any> {
+    return this.firestore
+      .collection(this.collectionName, ref => ref.where('ativo', '==', true))
+      .valueChanges({ idField: 'id' });
+  }
 }

@@ -28,7 +28,7 @@
             <div class="bg-white rounded-[20px] shadow-sm p-8 flex flex-col justify-between min-h-[192px] hover:shadow-md transition-shadow">
               <h2 class="text-black text-3xl font-bold font-['Poppins'] leading-10">Total de Produtos</h2>
               <div class="mt-4">
-                <span class="text-black text-5xl font-semibold font-['Poppins']">32</span>
+                <span class="text-black text-5xl font-semibold font-['Poppins']">{{ totalProd }}</span>
                 <p class="text-slate-500 text-xl font-medium font-['Poppins'] mt-1">Produtos cadastrados</p>
               </div>
             </div>
@@ -36,7 +36,7 @@
             <div class="bg-white rounded-[20px] shadow-sm p-8 flex flex-col justify-between min-h-[192px] hover:shadow-md transition-shadow">
               <h2 class="text-black text-3xl font-bold font-['Poppins'] leading-10">Estoque Total</h2>
               <div class="mt-4">
-                <span class="text-black text-5xl font-semibold font-['Poppins']">636</span>
+                <span class="text-black text-5xl font-semibold font-['Poppins']">{{ totalEstoque }}</span>
                 <p class="text-slate-500 text-xl font-medium font-['Poppins'] mt-1">Itens no estoque</p>
               </div>
             </div>
@@ -47,41 +47,13 @@
             <h2 class="text-black text-3xl font-bold font-['Poppins'] leading-10 mb-6 shrink-0">Registros Recentes</h2>
             
             <div class="flex flex-col w-full flex-1 overflow-y-auto pr-2">
-              <div class="flex items-center justify-between py-5 border-b border-black/20 last:border-b-0 cursor-pointer hover:px-2 transition-all">
-                <span class="text-black text-2xl font-medium font-['Poppins'] leading-9">Registro recente</span>
+              <div (click)="goRegistros()" *ngFor="let registro of ultimasBaixas" class="flex items-center justify-between py-5 border-b border-black/20 last:border-b-0 cursor-pointer hover:px-2 transition-all">
+                <span class="text-black text-2xl font-medium font-['Poppins'] leading-9">{{registro.nomeProduto}}</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-black">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
               </div>
-
-              <div class="flex items-center justify-between py-5 border-b border-black/20 last:border-b-0 cursor-pointer hover:px-2 transition-all">
-                <span class="text-black text-2xl font-medium font-['Poppins'] leading-9">Registro recente</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-black">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </div>
-
-              <div class="flex items-center justify-between py-5 border-b border-black/20 last:border-b-0 cursor-pointer hover:px-2 transition-all">
-                <span class="text-black text-2xl font-medium font-['Poppins'] leading-9">Registro recente</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-black">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </div>
-
-              <div class="flex items-center justify-between py-5 border-b border-black/20 last:border-b-0 cursor-pointer hover:px-2 transition-all">
-                <span class="text-black text-2xl font-medium font-['Poppins'] leading-9">Registro recente</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-black">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </div>
-
-              <div class="flex items-center justify-between py-5 border-b border-black/20 last:border-b-0 cursor-pointer hover:px-2 transition-all">
-                <span class="text-black text-2xl font-medium font-['Poppins'] leading-9">Registro recente</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 text-black">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </div>
-              
+  
               </div>
           </div>
         </main>

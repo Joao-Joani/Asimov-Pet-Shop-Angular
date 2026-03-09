@@ -20,4 +20,8 @@ export class BaixasService {
       .doc(id)
       .valueChanges({ idField: 'id' });
   }
+
+  getUltimasBaixas(): Observable<any[]> {
+    return this.firestore.collection('baixas', ref => ref.orderBy('data', 'desc').limit(5)).valueChanges({ idfield: 'id'});
+  }
 }
