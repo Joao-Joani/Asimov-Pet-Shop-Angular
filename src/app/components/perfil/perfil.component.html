@@ -23,90 +23,77 @@
 
         <main class="flex-1 w-full bg-white rounded-2xl shadow-sm p-8 lg:p-12 overflow-y-auto flex justify-center items-center">
           
-          <div class="flex flex-col w-full gap-10">
+          <div class="flex flex-col w-full max-w-3xl mx-auto gap-10">
             
-            <div class="flex flex-col lg:flex-row gap-12 w-full items-start">
+            <form class="w-full flex flex-col gap-6" #formPerfil="ngForm" >
               
-              <div class="flex flex-col items-center shrink-0 w-full lg:w-[250px] pt-2">
-                <div class="relative w-36 h-36 shrink-0 group">
-                  <img class="w-full h-full rounded-full object-cover shadow-sm transition-transform duration-300 group-hover:shadow-md" src="../../../assets/icons/Frame.svg" alt="Foto de Perfil" />
-                  <button class="absolute bottom-0 right-0 w-12 h-12 flex items-center justify-center p-2 hover:scale-110 transition-transform cursor-pointer">
-                    <img class="w-full h-full object-contain" src="../../../assets/icons/camera.png" alt="Editar" />
-                  </button>
+              <div class="flex flex-col sm:flex-row gap-6 w-full">
+                
+                <div class="relative w-full sm:w-1/2 flex flex-col gap-1.5" (click)="$event.stopPropagation()">
+                  <label class="text-sm pl-4 pointer-events-none transition-colors duration-300"
+                         [ngClass]="isEditingFirstName ? 'text-sky-600 font-bold' : 'text-zinc-500 font-medium'">
+                    Primeiro Nome
+                  </label>
+                  <input type="text" 
+                         name="firstName"
+                         [(ngModel)]="userData.firstName"
+                         [readonly]="!isEditingFirstName"
+                         [ngClass]="{
+                           'border-sky-400 bg-sky-50 text-sky-800 font-semibold shadow-[0_0_10px_rgba(56,189,248,0.2)] focus:bg-white focus:border-sky-500': isEditingFirstName,
+                           'border-zinc-500 bg-transparent text-sky-950': !isEditingFirstName
+                         }"
+                         class="w-full h-12 rounded-2xl border-2 px-4 pr-10 outline-none text-base font-['Poppins'] transition-all duration-300" />
+                  
+                  <img class="absolute right-4 bottom-3.5 w-5 h-5 cursor-pointer transition-all duration-300" 
+                       [ngClass]="isEditingFirstName ? 'opacity-100 scale-110' : 'opacity-60 hover:opacity-100 hover:scale-110'"
+                       src="../../../assets/icons/lapis.png" alt="Editar" 
+                       (click)="toggleEditFirstName()"/>
                 </div>
+                
+                <div class="relative w-full sm:w-1/2 flex flex-col gap-1.5" (click)="$event.stopPropagation()">
+                  <label class="text-sm pl-4 pointer-events-none transition-colors duration-300"
+                         [ngClass]="isEditingLastName ? 'text-sky-600 font-bold' : 'text-zinc-500 font-medium'">
+                    Último Nome
+                  </label>
+                  <input type="text" 
+                         name="lastName"
+                         [(ngModel)]="userData.lastName"
+                         [readonly]="!isEditingLastName"
+                         [ngClass]="{
+                           'border-sky-400 bg-sky-50 text-sky-800 font-semibold shadow-[0_0_10px_rgba(56,189,248,0.2)] focus:bg-white focus:border-sky-500': isEditingLastName,
+                           'border-zinc-500 bg-transparent text-sky-950': !isEditingLastName
+                         }"
+                         class="w-full h-12 rounded-2xl border-2 px-4 pr-10 outline-none text-base font-['Poppins'] transition-all duration-300" />
+                  
+                  <img class="absolute right-4 bottom-3.5 w-5 h-5 cursor-pointer transition-all duration-300" 
+                       [ngClass]="isEditingLastName ? 'opacity-100 scale-110' : 'opacity-60 hover:opacity-100 hover:scale-110'"
+                       src="../../../assets/icons/lapis.png" alt="Editar" 
+                       (click)="toggleEditLastName()"/>
+                </div>
+
               </div>
 
-              <form class="flex-1 flex flex-col gap-6 w-full" #formPerfil="ngForm" >
-                
-                <div class="flex flex-col sm:flex-row gap-6 w-full">
-                  
-                  <div class="relative w-full sm:w-1/2 flex flex-col gap-1.5" (click)="$event.stopPropagation()">
-                    <label class="text-sm pl-4 pointer-events-none transition-colors duration-300"
-                           [ngClass]="isEditingFirstName ? 'text-sky-600 font-bold' : 'text-zinc-500 font-medium'">
-                      Primeiro Nome
-                    </label>
-                    <input type="text" 
-                           name="firstName"
-                           [(ngModel)]="userData.firstName"
-                           [readonly]="!isEditingFirstName"
-                           [ngClass]="{
-                             'border-sky-400 bg-sky-50 text-sky-800 font-semibold shadow-[0_0_10px_rgba(56,189,248,0.2)] focus:bg-white focus:border-sky-500': isEditingFirstName,
-                             'border-zinc-500 bg-transparent text-sky-950': !isEditingFirstName
-                           }"
-                           class="w-full h-12 rounded-2xl border-2 px-4 pr-10 outline-none text-base font-['Poppins'] transition-all duration-300" />
-                    
-                    <img class="absolute right-4 bottom-3.5 w-5 h-5 cursor-pointer transition-all duration-300" 
-                         [ngClass]="isEditingFirstName ? 'opacity-100 scale-110' : 'opacity-60 hover:opacity-100 hover:scale-110'"
-                         src="../../../assets/icons/lapis.png" alt="Editar" 
-                         (click)="toggleEditFirstName()"/>
-                  </div>
-                  
-                  <div class="relative w-full sm:w-1/2 flex flex-col gap-1.5" (click)="$event.stopPropagation()">
-                    <label class="text-sm pl-4 pointer-events-none transition-colors duration-300"
-                           [ngClass]="isEditingLastName ? 'text-sky-600 font-bold' : 'text-zinc-500 font-medium'">
-                      Último Nome
-                    </label>
-                    <input type="text" 
-                           name="lastName"
-                           [(ngModel)]="userData.lastName"
-                           [readonly]="!isEditingLastName"
-                           [ngClass]="{
-                             'border-sky-400 bg-sky-50 text-sky-800 font-semibold shadow-[0_0_10px_rgba(56,189,248,0.2)] focus:bg-white focus:border-sky-500': isEditingLastName,
-                             'border-zinc-500 bg-transparent text-sky-950': !isEditingLastName
-                           }"
-                           class="w-full h-12 rounded-2xl border-2 px-4 pr-10 outline-none text-base font-['Poppins'] transition-all duration-300" />
-                    
-                    <img class="absolute right-4 bottom-3.5 w-5 h-5 cursor-pointer transition-all duration-300" 
-                         [ngClass]="isEditingLastName ? 'opacity-100 scale-110' : 'opacity-60 hover:opacity-100 hover:scale-110'"
-                         src="../../../assets/icons/lapis.png" alt="Editar" 
-                         (click)="toggleEditLastName()"/>
-                  </div>
+              <div class="relative w-full flex flex-col gap-1.5">
+                <label class="text-zinc-500 text-sm font-medium pl-4 pointer-events-none">E-mail</label> 
+                <input type="email" 
+                       name="email"
+                       [(ngModel)]="userData.email"
+                       readonly
+                       class="w-full h-12 rounded-2xl border-2 border-slate-300 bg-slate-100 px-4 pr-10 focus:outline-none text-base text-slate-500 font-['Poppins'] cursor-not-allowed" />
+                <img class="absolute right-4 bottom-3.5 w-5 h-5 pointer-events-none opacity-40" src="../../../assets/imgs/envelope.png" alt="Ícone" />
+              </div>
 
-                </div>
+              <div class="relative w-full flex flex-col gap-1.5">
+                <label class="text-zinc-500 text-sm font-medium pl-4 pointer-events-none">Cargo</label> 
+                <input type="text" 
+                       name="cargo"
+                       [(ngModel)]="userData.cargo"
+                       readonly
+                       class="w-full h-12 rounded-2xl border-2 border-slate-300 bg-slate-100 px-4 pr-10 focus:outline-none text-base text-slate-500 font-['Poppins'] cursor-not-allowed" />
+                <img class="absolute right-4 bottom-3.5 w-5 h-5 pointer-events-none opacity-40" src="../../../assets/imgs/nome.png" alt="Ícone" />
+              </div>
 
-                <div class="relative w-full flex flex-col gap-1.5">
-                  <label class="text-zinc-500 text-sm font-medium pl-4 pointer-events-none">E-mail</label> 
-                  <input type="email" 
-                         name="email"
-                         [(ngModel)]="userData.email"
-                         readonly
-                         class="w-full h-12 rounded-2xl border-2 border-slate-300 bg-slate-100 px-4 pr-10 focus:outline-none text-base text-slate-500 font-['Poppins'] cursor-not-allowed" />
-                  <img class="absolute right-4 bottom-3.5 w-5 h-5 pointer-events-none opacity-40" src="../../../assets/imgs/envelope.png" alt="Ícone" />
-                </div>
-
-                <div class="relative w-full flex flex-col gap-1.5">
-                  <label class="text-zinc-500 text-sm font-medium pl-4 pointer-events-none">Cargo</label> 
-                  <input type="text" 
-                         name="cargo"
-                         [(ngModel)]="userData.cargo"
-                         readonly
-                         class="w-full h-12 rounded-2xl border-2 border-slate-300 bg-slate-100 px-4 pr-10 focus:outline-none text-base text-slate-500 font-['Poppins'] cursor-not-allowed" />
-                  <img class="absolute right-4 bottom-3.5 w-5 h-5 pointer-events-none opacity-40" src="../../../assets/imgs/nome.png" alt="Ícone" />
-                </div>
-
-              </form>
-
-            </div>
+            </form>
 
             <button type="button" 
                     (click)="$event.stopPropagation(); salvarAlteracoes()" 
